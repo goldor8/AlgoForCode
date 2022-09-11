@@ -1,0 +1,103 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "algo-Aix",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#expression"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#string"
+		},
+		{
+			"include": "#params"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "comment.line",
+					"match": "//.*$"
+				},
+				{
+					"name": "entity.name.class",
+					"match": "(?<=Algorithme )[A-z]*"
+				},
+				{
+					"name": "comment.block",
+					"begin": "\\/\\*",
+					"end": "\\*\\/"
+				},
+				{
+					"name": "keyword.control.algofr",
+					"match": "\\b(Si|alors|Sinon|Algorithme|Fin|si|Début|Variables|tant_que|pour|renvoie|jusqua|repeter|sortie|continue)\\b"
+				},
+				{
+					"name": "support.type",
+					"match": "\\b(faire|ffaire|debut|fin|boucle|fboucle)\\b"
+				},
+				{
+					"name": "variable.language",
+					"match": "\\b(declarer)\\b"
+				},
+				{
+					"name": "storage.type",
+					"match": "\\b(caractere|string|tableau_de|booleen|entier|entier_naturel|reel)\\b"
+				},
+				{
+					"name": "constant.numeric",
+					"match": "\\b(\\d)\\b"
+				},
+				{
+					"name": "constant.language",
+					"match": "\\b(vrai|faux)\\b"
+				},
+				{
+					"name": "keyword.operator",
+					"match": "\\b(vaut|ne_vaut_pas|<|>|<=|>=)\\b"
+				},
+				{
+					"name": "keyword.control",
+					"match": "\\b(OU|OU_SINON|ET|ET_ALORS)\\b"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.algofr",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.algofr",
+					"match": "\\\\."
+				}
+			]
+		},
+		"string": {
+			"name": "constant.character",
+			"begin": "'",
+			"end": "'",
+			"patterns": [
+				{
+					"name": "constant.character.escape.algofr",
+					"match": "\\\\."
+				}
+			]
+		},
+		"expression": {
+			"name": "support.function",
+			"match": "Afficher|Saisir|ligne_suivante|taille|toupper|tolower|succ|pred|allonger|redimensionner"
+		},
+		"params": {
+			"name": "variable.parameter",
+			"match": "\\b(in|in_out|out)\\b"
+		}
+	},
+	"scopeName": "source.algofr"
+}

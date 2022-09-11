@@ -55,6 +55,13 @@
 					"*.algo"
 				]
 			}
+		],
+		"grammars": [
+			{
+				"language": "algofr",
+				"scopeName": "source.algofr",
+				"path": "./syntaxes/algofr.tmLanguage.json"
+			}
 		]
 	},
 	"scripts": {

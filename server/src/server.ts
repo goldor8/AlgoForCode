@@ -29,6 +29,8 @@ const connection = createConnection(ProposedFeatures.all);
 // Create a simple text document manager.
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
+//#region initialisation
+
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
@@ -80,7 +82,10 @@ connection.onInitialized(() => {
 		});
 	}
 });
+//#endregion
 
+
+//#region settingsConfiguration
 // The example settings
 interface ExampleSettings {
 	maxNumberOfProblems: number;
@@ -123,6 +128,7 @@ function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
 	}
 	return result;
 }
+//#endregion
 
 // Only keep settings for open documents
 documents.onDidClose(e => {
@@ -135,6 +141,7 @@ documents.onDidChangeContent(change => {
 	validateTextDocument(change.document);
 });
 
+//#region dignose
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// In this simple example we get the settings for every validate run.
 	const settings = await getDocumentSettings(textDocument.uri);
@@ -181,12 +188,14 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
+//#endregion
 
 connection.onDidChangeWatchedFiles(_change => {
 	// Monitored files have change in VSCode
 	connection.console.log('We received an file change event');
 });
 
+//#region completion
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
 	(_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
@@ -196,7 +205,7 @@ connection.onCompletion(
 		return [
 			{
 				label: 'Template',
-				kind: CompletionItemKind.Text,
+				kind: CompletionItemKind.Snippet,
 				data: 1,
 				insertTextFormat: InsertTextFormat.Snippet,
 				insertText: 'Algorithme ${1:name}\nVariables:\n\t${2:variables}\nDébut\n\t$0\nFin'
@@ -256,10 +265,10 @@ connection.onCompletionResolve(
 		return item;
 	}
 );
+//#endregion
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
 documents.listen(connection);
-
 // Listen on the connection
 connection.listen();

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
+import {initSemanticTokenProvider} from './semanticTokenProvider'
 
 import {
 	LanguageClient,
@@ -50,6 +51,7 @@ export function activate(context: ExtensionContext) {
 
 	// Start the client. This will also launch the server
 	client.start();
+	initSemanticTokenProvider()
 }
 
 export function deactivate(): Thenable<void> | undefined {
