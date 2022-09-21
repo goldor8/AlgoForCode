@@ -21,6 +21,7 @@ import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 import { kill } from 'process';
+import {vars,fetchDeclaredVariable} from './variablesFetcher';
 
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
@@ -148,6 +149,9 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	const text = textDocument.getText();
+
+	fetchDeclaredVariable(text);
+
 	const pattern = /\b[A-Z]{2,}\b/g;
 	let m: RegExpExecArray | null;
 
@@ -225,6 +229,12 @@ connection.onCompletion(
 				insertText: 'Variables:\n\t$0'
 			},
 			{
+				label: 'Début',
+				kind: CompletionItemKind.Snippet,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'Début\n\t$0\nFin'
+			},
+			{
 				label: 'Si Alors',
 				kind: CompletionItemKind.Keyword,
 				insertTextFormat: InsertTextFormat.Snippet,
@@ -237,6 +247,12 @@ connection.onCompletion(
 				insertText: 'Si ${1:condition} alors\n\t$2\nSinon\n\t$0\nFin si'
 			},
 			{
+				label: 'Sinon',
+				kind: CompletionItemKind.Keyword,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'Sinon\n\t$0'
+			},
+			{
 				label: 'Afficher',
 				kind: CompletionItemKind.Function,
 				insertTextFormat: InsertTextFormat.Snippet,
@@ -247,25 +263,109 @@ connection.onCompletion(
 				kind: CompletionItemKind.Function,
 				insertTextFormat: InsertTextFormat.Snippet,
 				insertText: 'Saisir(${1:variable})\n$0'
-			}
+			},
+			{
+				label: '= (affectation)',
+				kind: CompletionItemKind.Operator,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: '←'
+			},
+			{
+				label: 'Tant que',
+				kind: CompletionItemKind.Keyword,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'Tant que ${1:condition} faire\n\t$0\nFin tant que'
+			},
+			{
+				label: 'Pour',
+				kind: CompletionItemKind.Keyword,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'Pour ${1:variable} ← ${2:debut} à ${3:fin} faire\n\t$0\nFin pour'
+			},
+			{
+				label: 'Répéter Tant que',
+				kind: CompletionItemKind.Keyword,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'Répéter\n\t$0\nTant que ${1:condition}'
+			},
+			{
+				label: 'longueur',
+				kind: CompletionItemKind.Function,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'longueur(${1:chaine})'
+			},
+			{
+				label: 'Selon que',
+				kind: CompletionItemKind.Keyword,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'Selon ${1:variable}\n\tcas${1:valeur} : ${2;action}\n\tSinon : ${3:defaut}$0\nFin selon'
+			},
+			{
+				label: 'cas',
+				kind: CompletionItemKind.Keyword,
+				insertTextFormat: InsertTextFormat.Snippet,
+				insertText: 'cas ${1:valeur} : ${2;action}'
+			},
+			{
+				label: 'entier',
+				kind: CompletionItemKind.TypeParameter,
+				insertTextFormat: InsertTextFormat.PlainText,
+				insertText: 'entier'
+			},
+			{
+				label: 'réel',
+				kind: CompletionItemKind.TypeParameter,
+				insertTextFormat: InsertTextFormat.PlainText,
+				insertText: 'réel'
+			},
+			{
+				label: 'chaîne de caractères',
+				kind: CompletionItemKind.TypeParameter,
+				insertTextFormat: InsertTextFormat.PlainText,
+				insertText: 'chaîne de caractères'
+			},
+			{
+				label: 'caractère',
+				kind: CompletionItemKind.TypeParameter,
+				insertTextFormat: InsertTextFormat.PlainText,
+				insertText: 'caractère'
+			},
+			{
+				label: 'booléen',
+				kind: CompletionItemKind.TypeParameter,
+				insertTextFormat: InsertTextFormat.PlainText,
+				insertText: 'booléen'
+			},
+			{
+				label: 'OU',
+				kind: CompletionItemKind.Operator,
+				insertTextFormat: InsertTextFormat.PlainText,
+				insertText: 'OU'
+			},
+			{
+				label: 'ET',
+				kind: CompletionItemKind.Operator,
+				insertTextFormat: InsertTextFormat.PlainText,
+				insertText: 'ET'
+			},
 		];
 	}
 );
 
 // This handler resolves additional information for the item selected in
 // the completion list.
-/*connection.onCompletionResolve(
+connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
-		if (item.data === 1) {
+		/*if (item.data === 1) {
 			item.detail = 'TypeScript details';
 			item.documentation = 'TypeScript documentation';
 		} else if (item.data === 2) {
 			item.detail = 'JavaScript details';
 			item.documentation = 'JavaScript documentation';
-		}
+		}*/
 		return item;
 	}
-);*/
+);
 //#endregion
 
 // Make the text document manager listen on the connection

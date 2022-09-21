@@ -36,11 +36,7 @@
 				},
 				{
 					"name": "keyword.control.algofr",
-					"match": "\\b(Si|alors|Sinon|Algorithme|Fin|si|Début|Variables|tant_que|pour|renvoie|jusqua|repeter|sortie|continue)\\b"
-				},
-				{
-					"name": "support.type",
-					"match": "\\b(faire|ffaire|debut|fin|boucle|fboucle)\\b"
+					"match": "\\b(Si|alors|Sinon|Algorithme|Fin|si|Début|Variables|Pour|pour|à|faire|Tant|tant|que|renvoie|jusqua|repeter|sortie|continue)\\b"
 				},
 				{
 					"name": "variable.language",
@@ -48,7 +44,7 @@
 				},
 				{
 					"name": "storage.type",
-					"match": "\\b(caractere|string|tableau_de|booleen|entier|entier_naturel|reel)\\b"
+					"match": "\\b(caractère|caractere|chaîne de caractères|chaine de caracteres|booléen|booleen|entier|entier naturel|réel|reel)\\b"
 				},
 				{
 					"name": "constant.numeric",

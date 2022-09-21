@@ -6,7 +6,7 @@ const tokenTypes = ['comment', 'string', 'keyword', 'number', 'regexp', 'operato
 'method', 'decorator', 'macro', 'variable', 'parameter', 'property', 'label'];
 const tokenModifiers = ['declaration', 'documentation', 'readonly', 'static', 'abstract', 'deprecated',
 'modification', 'async'];
-const separationCaracter = [' ','=','<','>','+','-','*','/','(',')','[',']','{','}',',']
+const separationCaracter = [' ','=','<','>','+','-','*','/','%','(',')','[',']','{','}',',']
 const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
 
 let vars = new Array
@@ -65,7 +65,6 @@ function getInstructionsLineRange(file: vscode.TextDocument) : [integer,integer]
 function fetchDeclaredVariable(file: vscode.TextDocument){
   vars = new Array
   let variableBounds = getVariablesDeclarationLineRange(file)
-  console.log(variableBounds)
   const lines = file.getText().split(/\r\n|\r|\n/);
   for (let i = 0; i < variableBounds[1]; i++) {
     const line = lines[variableBounds[0] + i].trim();
@@ -78,29 +77,10 @@ function fetchDeclaredVariable(file: vscode.TextDocument){
 }
 
 function highlightVariables(file: vscode.TextDocument,tokenBuilder : vscode.SemanticTokensBuilder){
-  console.log("highlighting")
   fetchDeclaredVariable(file)
-  console.log(vars)
   const lines = file.getText().split(/\r\n|\r|\n/);
   for (let i = 1; i < lines.length; i++) {
     highlightVariablesInLine(lines[i], i, tokenBuilder)
-    /*
-    const line = lines[i];
-    const words = line.split(" ")
-    let charIndex = 0
-    for (let x = 0; x < words.length; x++) {
-      const word = words[x];
-      if(vars.includes(word)){
-        console.log("line : "+i+" contain at "+charIndex+" lenght "+word.length)
-        tokenBuilder.push(
-          new vscode.Range(new vscode.Position(i,charIndex), new vscode.Position(i,charIndex+word.length)),
-          'variable',
-          []
-        );
-      }
-      charIndex += word.length + 1
-    }
-    */
   }
 }
 
@@ -110,15 +90,14 @@ function highlightVariablesInLine(line: string,lineNumber: integer, tokenBuilder
   let possibleVars = vars
   let newPossibleVars = new Array
   while(i < line.length){
-    console.log("i : "+i+" = "+line[i])
     if(separationCaracter.includes(line[i])){
-      console.log("separation")
       checkVariableBefore()
       possibleVars = vars
       wordIndex = 0
       i++
       continue
     }
+
     for(let x = 0; x < possibleVars.length; x++){
       if(wordIndex > possibleVars[x].length - 1){
         continue
@@ -126,10 +105,8 @@ function highlightVariablesInLine(line: string,lineNumber: integer, tokenBuilder
       else if(possibleVars[x][wordIndex] == line[i]){
         newPossibleVars.push(possibleVars[x])
         wordIndex++
-        console.log("letter : "+line[i])
       }
     }
-    console.log("new possible vars : "+newPossibleVars+" word index : "+wordIndex)
     possibleVars = newPossibleVars
     newPossibleVars = new Array
     i++
@@ -141,7 +118,6 @@ function highlightVariablesInLine(line: string,lineNumber: integer, tokenBuilder
 
   function checkVariableBefore(){
     if(isVariableCorrectLenght(line.substring(i-wordIndex,i),possibleVars) && wordIndex > 0){
-      console.log("found frome : "+lineNumber+","+(i-wordIndex)+" to "+lineNumber+","+i)
       tokenBuilder.push(
         new vscode.Range(new vscode.Position(lineNumber,i-wordIndex), new vscode.Position(lineNumber,i)),
         'variable',
