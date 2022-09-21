@@ -187,6 +187,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+	connection.onDocumentHighlight
 }
 //#endregion
 
@@ -253,7 +254,7 @@ connection.onCompletion(
 
 // This handler resolves additional information for the item selected in
 // the completion list.
-connection.onCompletionResolve(
+/*connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
 		if (item.data === 1) {
 			item.detail = 'TypeScript details';
@@ -264,7 +265,7 @@ connection.onCompletionResolve(
 		}
 		return item;
 	}
-);
+);*/
 //#endregion
 
 // Make the text document manager listen on the connection
