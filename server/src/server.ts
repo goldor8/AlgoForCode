@@ -157,7 +157,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 	let problems = 0;
 	const diagnostics: Diagnostic[] = [];
-	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
+	while ((m = pattern.exec(text)) && problems < /*settings.maxNumberOfProblems*/1000) {
 		problems++;
 		const diagnostic: Diagnostic = {
 			severity: DiagnosticSeverity.Warning,
