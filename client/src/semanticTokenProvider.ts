@@ -1,3 +1,4 @@
+import { Console } from 'console';
 import * as vscode from 'vscode';
 import { integer } from 'vscode-languageclient';
 
@@ -104,15 +105,19 @@ function highlightVariablesInLine(line: string,lineNumber: integer, tokenBuilder
       }
       else if(possibleVars[x][wordIndex] == line[i]){
         newPossibleVars.push(possibleVars[x])
-        wordIndex++
       }
     }
+    if(newPossibleVars.length > 0){
+      wordIndex++
+    }
+    
     possibleVars = newPossibleVars
     newPossibleVars = new Array
     i++
     
     if(i == line.length){
       checkVariableBefore()
+      wordIndex = 0
     }
   }
 
