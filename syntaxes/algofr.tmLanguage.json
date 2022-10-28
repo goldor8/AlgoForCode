@@ -88,7 +88,7 @@
 		},
 		"expression": {
 			"name": "support.function",
-			"match": "Afficher|Saisir|ligne_suivante|taille|toupper|tolower|succ|pred|allonger|redimensionner"
+			"match": "Afficher|Saisir|longueur|ligne_suivante|taille|toupper|tolower|succ|pred|allonger|redimensionner"
 		},
 		"params": {
 			"name": "variable.parameter",
